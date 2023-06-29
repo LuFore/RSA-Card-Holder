@@ -39,7 +39,8 @@ module card_handles(x,y,z,clip_len,clip_height,clip_wall){
 	union(){
 		cube([x,y,z]);
 		translate([x/2,y/2,0])
-		for(i=[0:1])rotate([0,0,180*i])translate([0,y/2,0])
+        //i=[0:1] for a holder on both sides
+		for(i=[1:1])rotate([0,0,180*i])translate([0,y/2,0])
 			clip(clip_wall,clip_len,clip_height,z);
 	};
 }
@@ -76,14 +77,14 @@ module handle_cutout(x,y,z,midspace){
 };
 
 
-
 module holder(wall,
 	card_x, card_y, card_z,
 	clip_len,clip_height,
-	rsa_bulb,rsa_len,rsa_height,rsa_width){
+	rsa_bulb,rsa_len,rsa_height,rsa_width,
+    rsa_cutout_len,rsa_cutout_width){
 
 	RSA_correction = [(card_x-rsa_len)/2,(card_y-rsa_bulb)/2,wall];
-
+        
 	difference(){
 		union(){
 			translate([0,0,0])
@@ -92,19 +93,25 @@ module holder(wall,
 		}
 	//cutout portion
 		union(){
-			translate([wall,-wall*4,wall])
-				card(card_x,card_y+wall*4,card_z);
+			translate([wall,-wall*50,wall])
+				card(card_x,card_y+wall*50,card_z);
 			translate([wall*2,wall*2,wall])
 				card(card_x-wall*2,card_y-wall*2,wall+card_z);
-			translate([rsa_bulb/2 + wall, rsa_bulb/2 + wall,0])//de-center
+			translate([rsa_bulb/2 + wall, rsa_bulb/2 + wall,0])//de-centre
 			translate(RSA_correction)RSA(rsa_bulb,rsa_len,rsa_height,rsa_width);
+            //Cutout for RSA token lanyard connector
+            translate(RSA_correction)
+            translate([0,rsa_bulb/2+wall - rsa_cutout_width/2,-(        rsa_height+2*wall)])
+            cube([rsa_cutout_len,rsa_cutout_width,rsa_height+2*wall]);
+
 		};
 	};
 };
 
 holder(
-	3,//wall thickness
-	85.5, 53.8 ,0.7 ,//card size
-	20  , 5,         //size of tabs
-	27.1, 78   ,10  ,20.1//rsa bulb
+	2,//wall thickness
+	88, 56 ,1.2 ,//card size
+    15, 10,         //size of tabs
+	30, 80 ,9  ,22,//rsa bulb
+    10, 10 //cutout for RSA lanyard attachment point
 	);
