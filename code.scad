@@ -49,7 +49,7 @@ module card_handles(x,y,z,clip_len,clip_height,clip_wall){
 module RSA_holder(rsa_bulb,rsa_len,rsa_height,rsa_width,wall){
 	translate([rsa_bulb/2 + wall, rsa_bulb/2 + wall,(rsa_height+wall)/2])//de-center
 	difference(){
-		RSA(rsa_bulb+wall*2,rsa_len+wall*2,rsa_height+wall,rsa_width+wall*2);
+		RSA(rsa_bulb+wall*2,rsa_len+wall*2,rsa_height,rsa_width+wall*2);
 		union(){
 			translate([0,0,-wall])
 			RSA(rsa_bulb       ,rsa_len     ,rsa_height  ,rsa_width);
